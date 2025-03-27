@@ -1,108 +1,132 @@
 
-# 🐳 flask-demo
 
-[![Docker Image CI](https://github.com/Xu-Hardy/flask-demo/actions/workflows/docker.yml/badge.svg)](https://github.com/Xu-Hardy/flask-demo/actions/workflows/docker.yml)
+# 📝 Markdown Connector API
 
-A minimal, production-ready Flask app containerized with Docker.  
-Supports both **x86_64** and **ARM64** platforms via Docker Buildx.  
-Images are automatically published to Docker Hub on every git tag push.
+A lightweight Flask-based Markdown API server that:
+
+- 🧾 Recursively reads `.md` files in a directory
+- ✨ Auto-fills missing frontmatter (title/date/summary/tags)
+- 📦 Generates a searchable `index.json` for static sites
+- 📂 Serves raw markdown files via API
+- 📚 Provides Swagger UI for developers
 
 ---
 
 ## 🚀 Quick Start
 
-### Pull from Docker Hub
+### 1. Clone this project
 
 ```bash
-docker pull cloudsmithy/flask-demo:latest
+git clone https://github.com/yourname/markdown-connector.git
+cd markdown-connector
 ```
 
-### Run the container
+### 2. Place your `.md` files under the `markdown/` folder
 
 ```bash
-docker run -p 5000:5000 cloudsmithy/flask-demo:latest
+mkdir markdown
+cp your_posts/*.md markdown/
 ```
-
-Then open your browser at [http://localhost:5000](http://localhost:5000)
 
 ---
 
-## 🧱 Docker Compose
+## 🐳 Run with Docker Compose
+
+### docker-compose.yml
 
 ```yaml
+version: "3"
+
 services:
   flask-app:
-    image: cloudsmithy/flask-demo:latest
+    container_name: markdown-connector
+    build: .
     ports:
-      - "5000:5000"
+      - "1313:5000"
+    volumes:
+      - ./markdown:/app/markdown
+      - ./static:/app/markdown/static
     restart: always
 ```
 
-Start it:
+### Start the service
 
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
 ---
 
-## 🌍 Multi-Architecture Support
+## 🧩 Project Structure
 
-This image supports the following platforms:
-
-| Architecture | Status |
-|--------------|--------|
-| `linux/amd64`| ✅     |
-| `linux/arm64`| ✅     |
-
-Built using Docker Buildx and QEMU in GitHub Actions.
-
----
-
-## 🔧 GitHub Actions CI
-
-This project includes a CI pipeline that:
-
-- Triggers on `git push` with tags like `v1.0.0`
-- Builds the image for both amd64 and arm64
-- Pushes **both version tag and `latest`** to Docker Hub
-
-### To trigger a build:
-
-```bash
-git tag v1.0.0
-git push origin v1.0.0
 ```
-
-This will publish:
-
-- `cloudsmithy/flask-demo:v1.0.0`
-- `cloudsmithy/flask-demo:latest`
-
----
-
-## 🔐 Docker Hub Authentication
-
-To enable publishing in GitHub Actions, define the following secrets:
-
-| Name              | Description                   |
-|-------------------|-------------------------------|
-| `DOCKER_USERNAME` | Your Docker Hub username      |
-| `DOCKER_PASSWORD` | Your Docker Hub Access Token  |
-
-Add them under **GitHub → Settings → Secrets → Actions**.
-
----
-
-## 🧪 Sample Output
-
-```bash
-Hello from multi-arch Flask Docker in production mode!
+.
+├── app.py               # Flask app with Swagger
+├── requirements.txt
+├── Dockerfile
+├── start.sh
+├── markdown/            # ← Your .md files go here
+├── static/              # ← index.json will be generated here
+└── docker-compose.yml
 ```
 
 ---
 
-## 👤 Maintainer
+## 🌐 API Endpoints
 
-Made with ❤️ by [cloudsmithy](https://hub.docker.com/u/cloudsmithy)  
-PRs and Issues welcome!
+| Endpoint              | Method | Description                            |
+|-----------------------|--------|----------------------------------------|
+| `/`                   | GET    | Health check                           |
+| `/posts/`             | GET    | List all markdown files                |
+| `/posts/<filename>`   | GET    | Get raw `.md` content                  |
+| `/api/posts`          | GET    | Get `index.json` metadata              |
+| `/api/refresh`        | GET    | Rebuild index (optional `?dryrun=true`)|
+| `/index.json`         | GET    | Alias for `/api/posts`                |
+| `/apidocs/`           | GET    | Swagger UI                             |
+
+---
+
+## 🧪 Sample `index.json` Output
+
+```json
+{
+  "title": "My First Post",
+  "summary": "",
+  "tags": ["notes"],
+  "category": "blog",
+  "created": "2025-03-27T14:00:00",
+  "url": "/posts/blog/first-post.md"
+}
+```
+
+---
+
+## 📚 Swagger UI
+
+> Auto-generated docs available at:  
+> 👉 `http://localhost:1313/apidocs/`
+
+---
+
+## 👨‍💻 Dev Tips
+
+- `index.json` is auto-generated at server startup
+- Missing frontmatter (like title, date, tags) will be filled in
+- All `.md` files are served as raw markdown from `/posts/`
+
+---
+
+## 📦 Dependencies
+
+```txt
+flask
+markdown
+python-frontmatter
+flasgger
+```
+
+---
+
+## ❤️ License
+
+MIT License. Fork & use freely. Contributions welcome!
