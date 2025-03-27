@@ -1,0 +1,5 @@
+gunicorn
+flask
+markdown
+python-frontmatter
+flasgger

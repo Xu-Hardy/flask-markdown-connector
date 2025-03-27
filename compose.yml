@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  flask-app:
+    container_name: markdown-connector         # 👈 自定义容器名称
+    build: .
+    ports:
+      - "1313:5000"
+    volumes:
+      - /Users/xu/Desktop/blog/aaa:/app/markdown
+    restart: always

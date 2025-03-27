@@ -1,0 +1,6 @@
+services:
+  flask-app:
+    image: cloudsmithy/flask-markdown-connector:latest
+    ports:
+      - "50011:5000"
+    restart: always
