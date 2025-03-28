@@ -20,7 +20,11 @@ docker pull cloudsmithy/flask-demo:latest
 ### Run the container
 
 ```bash
-docker run -p 5000:5000 cloudsmithy/flask-demo:latest
+docker run -d --name markdown-connector \
+  -p 5000:5000 \
+  -v "$(pwd):/app/markdown" \
+  --restart always \
+  cloudsmithy/flask-markdown-connector
 ```
 
 Then open your browser at [http://localhost:5000](http://localhost:5000)
