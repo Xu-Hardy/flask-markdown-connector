@@ -1,7 +1,14 @@
 
-# 🐳 flask-demo
+# 🐳 flask-markdown-connector
 
 [![Docker Image CI](https://github.com/Xu-Hardy/flask-demo/actions/workflows/docker.yml/badge.svg)](https://github.com/Xu-Hardy/flask-demo/actions/workflows/docker.yml)
+
+
+为了这个文章做了这个工程：
+
+《不建 Hugo、不用 Hexo，纯 Markdown 文件也能接入 Coco-AI！》
+
+https://mp.weixin.qq.com/s/Xvn1CcQqlVOREY0fSI2A4w
 
 A minimal, production-ready Flask app containerized with Docker.  
 Supports both **x86_64** and **ARM64** platforms via Docker Buildx.  
